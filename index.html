@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>業務適応ストレスチェック | 環境適応評価機構（EAEO）</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-container">
+      <div class="logo-section">
+        <img src="" data-r2-src="logo.svg" alt="EAEO" class="logo">
+        <div class="org-info">
+          <h1>環境適応評価機構</h1>
+          <p class="subtitle">Environmental Adaptation Evaluation Organization</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <section id="intro-section" class="intro-section">
+      <div class="content-box">
+        <h2>業務適応ストレスチェック（簡易版）</h2>
+        <p class="intro-text">
+          このプログラムは、あなたの業務環境への適応傾向とストレス耐性を簡潔に評価するツールです。
+          8つの設問に対して5段階で回答していただくことで、あなたの特性を分析いたします。
+        </p>
+        <p class="intro-text">
+          結果は個人の働き方の理解と、より良い環境構築の参考情報として提供されます。
+          医学的診断ではございませんので、あくまで参考値としてご活用ください。
+        </p>
+        
+        <div class="org-description">
+          <h3>環境適応評価機構について</h3>
+          <p>
+            EAEOは、個人のストレス耐性や環境適応傾向を分析し、
+            より良い労働環境の実現を支援する評価機関です。
+            企業・教育機関向けに科学的な評価プログラムを提供し、
+            組織と個人の適合度向上に取り組んでいます。
+          </p>
+        </div>
+
+        <button id="start-btn" class="btn-primary">診断を開始する</button>
+      </div>
+    </section>
+
+    <section id="form-section" class="form-section" style="display:none;">
+      <div class="content-box">
+        <h2>業務適応評価 アンケート</h2>
+        <p class="form-intro">各設問に対して、最も当てはまる選択肢を選んでください。</p>
+        
+        <form id="diagnostic-form">
+          <div id="questions-container"></div>
+          
+          <div class="form-actions">
+            <button type="button" id="back-btn" class="btn-secondary">戻る</button>
+            <button type="submit" id="submit-btn" class="btn-primary">診断結果を表示</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="result-section" class="result-section" style="display:none;">
+      <div class="content-box result-content">
+        <div class="result-wrapper">
+          <div class="result-visual">
+            <img id="result-char" src="" data-r2-src="" alt="診断結果" class="result-character">
+          </div>
+          
+          <div class="result-info">
+            <h2 id="result-title" class="result-title"></h2>
+            <p id="result-code" class="result-code"></p>
+            
+            <div id="result-description" class="result-description"></div>
+            
+            <div class="result-features">
+              <h3>主な特徴</h3>
+              <ul id="features-list"></ul>
+            </div>
+
+            <div id="result-extra" class="result-extra"></div>
+          </div>
+        </div>
+
+        <div id="result-chart" class="result-chart">
+          <canvas id="radar-chart"></canvas>
+        </div>
+
+        <div class="result-actions">
+          <button id="restart-btn" class="btn-primary">もう一度診断する</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 Environmental Adaptation Evaluation Organization (EAEO)</p>
+      <p class="disclaimer">本プログラムは参考情報として提供されます。医学的診断ではございません。</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
