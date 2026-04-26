@@ -89,6 +89,7 @@ function attachEventListeners() {
   document.getElementById("restart-btn").addEventListener("click", () => {
     document.getElementById("result-section").style.display = "none";
     document.getElementById("intro-section").style.display = "block";
+    removeAbnormalStyling();
   });
 }
 
@@ -107,6 +108,12 @@ function handleSubmit() {
 
   document.getElementById("form-section").style.display = "none";
   document.getElementById("result-section").style.display = "block";
+  
+  // 異質結果の場合、特殊なスタイリングを適用
+  if (result.type === "unit7") {
+    applyAbnormalStyling();
+  }
+  
   document.querySelector(".result-section").scrollIntoView({ behavior: "smooth" });
 }
 
@@ -134,6 +141,112 @@ function determineNormalResult() {
   } else {
     return NORMAL_RESULTS.sensitive;
   }
+}
+
+function applyAbnormalStyling() {
+  const resultSection = document.getElementById("result-section");
+  const resultContent = document.querySelector(".result-content");
+  const resultWrapper = document.querySelector(".result-wrapper");
+  const resultTitle = document.getElementById("result-title");
+  const resultCode = document.getElementById("result-code");
+  const resultDescription = document.querySelector(".result-description");
+  const featuresList = document.querySelector(".result-features");
+  const resultChart = document.querySelector(".result-chart");
+  const resultExtra = document.getElementById("result-extra");
+
+  // 背景をグレー化
+  resultSection.style.background = "linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%)";
+  resultContent.style.background = "#f5f5f5";
+  resultContent.style.borderRadius = "0px";
+  resultContent.style.boxShadow = "0 0 20px rgba(0,0,0,0.15)";
+  resultContent.style.border = "1px solid #999";
+
+  // グリッドパターン背景
+  resultContent.style.backgroundImage = "repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(100,100,100,0.03) 1px, rgba(100,100,100,0.03) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(100,100,100,0.03) 1px, rgba(100,100,100,0.03) 2px)";
+  resultContent.style.backgroundSize = "10px 10px";
+
+  // タイトルを機械的に
+  resultTitle.style.color = "#333";
+  resultTitle.style.fontFamily = "monospace, 'Courier New'";
+  resultTitle.style.letterSpacing = "0.2em";
+  resultTitle.style.fontWeight = "normal";
+  resultTitle.style.fontSize = "1.4rem";
+
+  // コードを目立たせる
+  resultCode.style.color = "#666";
+  resultCode.style.fontFamily = "monospace";
+  resultCode.style.fontSize = "0.75rem";
+  resultCode.style.fontWeight = "normal";
+  resultCode.style.letterSpacing = "0.3em";
+  resultCode.style.marginBottom = "1.5rem";
+
+  // 説明文を冷たく
+  resultDescription.style.background = "#efefef";
+  resultDescription.style.color = "#555";
+  resultDescription.style.fontFamily = "monospace";
+  resultDescription.style.lineHeight = "1.9";
+  resultDescription.style.borderLeft = "3px solid #999";
+  resultDescription.style.borderRadius = "0px";
+
+  // 特徴リスト
+  featuresList.style.borderTop = "1px solid #ccc";
+  featuresList.style.paddingTop = "1rem";
+  const featureItems = featuresList.querySelectorAll("li");
+  featureItems.forEach(li => {
+    li.style.color = "#444";
+    li.style.fontFamily = "monospace";
+    li.style.fontSize = "0.85rem";
+  });
+
+  // チャートを無機質に
+  resultChart.style.background = "#efefef";
+  resultChart.style.borderRadius = "0px";
+  resultChart.style.border = "1px solid #ccc";
+
+  // キャラクター画像の加工（セピア + コントラスト）
+  const charImg = document.getElementById("result-char");
+  if (charImg) {
+    charImg.style.filter = "grayscale(1) contrast(1.2) brightness(0.95)";
+    charImg.style.borderRadius = "0px";
+  }
+
+  // 結果の説明部分を強調
+  if (resultExtra) {
+    resultExtra.style.background = "#d8d8d8";
+    resultExtra.style.color = "#333";
+    resultExtra.style.fontFamily = "monospace";
+    resultExtra.style.borderRadius = "0px";
+    resultExtra.style.fontSize = "0.8rem";
+    resultExtra.style.border = "1px dashed #999";
+  }
+
+  // ページ全体を微かに異質に
+  document.body.style.background = "#eaeaea";
+
+  // スクロールバーの色も変更（CSS）
+  const style = document.createElement("style");
+  style.textContent = `
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #ddd;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #999;
+      border-radius: 0px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #777;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function removeAbnormalStyling() {
+  const resultSection = document.getElementById("result-section");
+  resultSection.style.background = "";
+  document.body.style.background = "#f8f9fa";
 }
 
 function displayResult(result) {
@@ -179,6 +292,23 @@ function displayResult(result) {
     extraDiv.innerHTML += adviceHtml;
   }
 
+  // 異質結果の場合、キャラクター画像と説明文も特殊スタイリング
+  if (result.type === "unit7") {
+    const resultInfo = document.querySelector(".result-info");
+    if (resultInfo) {
+      resultInfo.style.fontFamily = "monospace";
+    }
+    
+    // 異質結果の場合は、メトリクス部分をさらに機械的に
+    if (result.keyMetrics) {
+      const metricsDiv = extraDiv.querySelector("div");
+      if (metricsDiv) {
+        metricsDiv.style.fontFamily = "monospace";
+        metricsDiv.style.color = "#555";
+      }
+    }
+  }
+
   drawRadarChart(result.scales);
 }
 
@@ -197,8 +327,11 @@ function drawRadarChart(scales) {
   const numAxes = labels.length;
   const angleSlice = (Math.PI * 2) / numAxes;
 
-  ctx.fillStyle = "rgba(26, 60, 114, 0.1)";
-  ctx.strokeStyle = "#1e3c72";
+  // 異質結果かどうかで色を変更
+  const isAbnormal = Object.values(scales).every(v => v >= 90);
+  
+  ctx.fillStyle = isAbnormal ? "rgba(100, 100, 100, 0.15)" : "rgba(26, 60, 114, 0.1)";
+  ctx.strokeStyle = isAbnormal ? "#666" : "#1e3c72";
   ctx.lineWidth = 2;
 
   ctx.beginPath();
@@ -214,7 +347,7 @@ function drawRadarChart(scales) {
   ctx.fill();
   ctx.stroke();
 
-  ctx.strokeStyle = "#ddd";
+  ctx.strokeStyle = isAbnormal ? "#bbb" : "#ddd";
   ctx.lineWidth = 1;
   for (let j = 1; j <= 5; j++) {
     const radius = (maxRadius / 5) * j;
@@ -230,8 +363,8 @@ function drawRadarChart(scales) {
     ctx.stroke();
   }
 
-  ctx.fillStyle = "#333";
-  ctx.font = "11px sans-serif";
+  ctx.fillStyle = isAbnormal ? "#666" : "#333";
+  ctx.font = isAbnormal ? "11px monospace" : "11px sans-serif";
   ctx.textAlign = "center";
   labels.forEach((label, i) => {
     const angle = angleSlice * i - Math.PI / 2;
